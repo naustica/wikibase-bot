@@ -4,8 +4,8 @@ This repository contains an extended implementation of this [wikibase-bot](https
 
 ## Features
 
-- Import properties
-- more features in pipeline!
+- Import of properties
+- More features in pipeline!
 
 ## Installation
 
@@ -17,14 +17,14 @@ git clone https://github.com/naustica/wikibase-bot.git
 
 ### Requirements
 
-Code has been tested with Python 3.7. Besides, make sure you have installed the following packages.
+The Code has been tested with Python 3.7. Besides, make sure you have installed the following packages.
 
 - [requests](https://github.com/psf/requests)
 - [pandas](https://github.com/pandas-dev/pandas)
 
 ## Configuration
 
-This guide assumes that you already have setup a wikibase instance. If not, visit this [page](https://semlab.io/howto/wikibase_basic). In addition, you will need to create a wikibase bot account to make this code works.
+This guide assumes that you already setup a wikibase instance. If not, visit this [page](https://semlab.io/howto/wikibase_basic). In addition, you will need to create a wikibase bot account to make this code work.
 
 ### Create a bot account
 
