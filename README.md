@@ -21,6 +21,8 @@ The Code has been tested with Python 3.7. Besides, make sure you have installed 
 
 - [requests](https://github.com/psf/requests)
 - [pandas](https://github.com/pandas-dev/pandas)
+- [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/)
+- [lxml](https://github.com/lxml/lxml)
 
 ## Configuration
 
