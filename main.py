@@ -38,9 +38,10 @@ for idx, row in df.iterrows():
         print(f"Property type of: {row['property']} is unknown.")
         continue
 
-    data = bot.write_property(api_url=url,
-                              edit_token=csrf_token,
-                              label_value=row['propertyLabel'],
-                              description_value=row['propertyDescription'],
-                              lang='en',
-                              datatype=property_type)
+    data = bot.write_entity(api_url=url,
+                            edit_token=csrf_token,
+                            new='property',
+                            label_value=row['propertyLabel'],
+                            description_value=row['propertyDescription'],
+                            lang='en',
+                            datatype=property_type)

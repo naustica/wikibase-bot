@@ -17,6 +17,12 @@ class Wikibot:
         self.session = requests.Session()
 
     def retrieve_credentials(self) -> List[str]:
+        """
+        Returns
+        -------
+        List[str]
+            Information on bot credentials.
+        """
 
         endpoint_url = os.environ.get('wikibase_instance_url')
         username = os.environ.get('wikibase_username')
@@ -25,6 +31,17 @@ class Wikibot:
         return [endpoint_url, username, password]
 
     def get_login_token(self, api_url: str) -> str:
+        """
+        Parameters
+        ----------
+        api_url: str
+            Url to the Wikibase API instance.
+
+        Returns
+        -------
+        str
+            Login token
+        """
         parameters = dict(
             action='query',
             meta='tokens',
@@ -38,6 +55,22 @@ class Wikibot:
 
     def login(self, api_url: str, token: str,
               username: str, password: str):
+        """
+        Parameters
+        ----------
+        api_url: str
+            Url to the Wikibase API instance.
+        token: str
+            Your login token.
+        username: str
+            Your Wikibase bot username.
+        password: str
+            Your wikibase bot password.
+
+        Returns
+        -------
+        JSON object
+        """
         parameters = dict(
             action='login',
             lgname=username,
@@ -51,6 +84,15 @@ class Wikibot:
         return data
 
     def get_csrf_token(self, api_url: str) -> str:
+        """
+        api_url: str
+            Url to the Wikibase API instance.
+
+        Returns
+        -------
+        str
+            CSRF Token
+        """
         parameters = dict(
             action='query',
             meta='tokens',
@@ -62,9 +104,39 @@ class Wikibot:
 
         return data['query']['tokens']['csrftoken']
 
-    def write_property(self, api_url: str, edit_token: str, label_value: str,
-                       description_value: str, lang: str, datatype: str,
-                       id: str = None, alias_values: str = None):
+    def write_entity(self, api_url: str, edit_token: str, entity_type: str,
+                     label_value: str, description_value: str, lang: str,
+                     datatype: str = None, id: str = None,
+                     alias_value: str = None):
+        """
+        This method creates a single new Wikibase entity and modifies it with
+        serialised information.
+
+        Parameters
+        ----------
+        api_url: str
+            Url to the Wikibase API instance.
+        edit_token: str
+            CSRF token which can be generated with the get_crsf_token method.
+        entity_type: str
+            Type of entity to be created.
+        label_value: str
+            Label value of entity.
+        description_value: str
+            Description value of entity.
+        lang: str
+            Language of entity information.
+        datatype: str
+            If entity type is set to property, specify the desired datatype.
+        id: str
+            Id of an existing entity type to be modified.
+        alias_value: str
+            Set an alias for an entity.
+
+        Returns
+        -------
+        JSON object
+        """
 
         data = dict()
 
@@ -76,19 +148,20 @@ class Wikibot:
                                              'value': description_value}
 
         aliases = dict(aliases=dict())
-        aliases['aliases'][lang] = {'language': lang, 'value': alias_values}
+        aliases['aliases'][lang] = {'language': lang, 'value': alias_value}
 
         data.update(labels)
         data.update(description)
-        data.update({'datatype': datatype})
-        if alias_values:
+        if alias_value:
             data.update(aliases)
+        if entity_type == 'property':
+            data.update({'datatype': datatype})
 
         parameters = dict(
             action='wbeditentity',
             bot=1,
             token=edit_token,
-            new='property',
+            new=entity_type,
             data=json.dumps(data)
         )
 
