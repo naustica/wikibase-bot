@@ -24,7 +24,7 @@ The Code has been tested with Python 3.7. Besides, make sure you have installed 
 
 ## Configuration
 
-This guide assumes that you already setup a wikibase instance. If not, visit this [page](https://semlab.io/howto/wikibase_basic). In addition, you will need to create a wikibase bot account to make this code work.
+This guide assumes that you already setup a wikibase instance. If not, visit this [page](http://learningwikibase.com/install-wikibase/). In addition, you will need to create a wikibase bot account to make this code work.
 
 ### Create a bot account
 
@@ -42,7 +42,7 @@ For a more detailed description on how to create a wikibase bot account visit th
 Once you created your bot account, export the necessary environment variables via terminal.
 
 ```bash
-export wikibase_instance_url=your-wikibase-url
+export wikibase_instance_url=your-wikibase-url/w/api.php
 export wikibase_username=your-wikibase-bot-username
 export wikibase_pw=your-wikibase-bot-password
 ```
@@ -57,7 +57,7 @@ python main.py
 
 ## Import properties into any Wikibase instance
 
-When launching a fresh installed Wikibase Docker instance, you will probably encounter an empty database. This bot helps you to import basic properties into your wikibase. For that, just export a csv-File containing property lables and description from e.g. Wikidata (you can use this [query](https://w.wiki/ZJN)) and feed this bot.
+When launching a fresh installed Wikibase Docker instance, you will probably encounter an empty database. This bot helps you to import basic properties into your wikibase. For that, just export a tsv-file containing property lables and description from e.g. Wikidata (you can use this [query](https://w.wiki/ZJN)) and feed this bot.
 
 ```python
 from wikibot.databot import Wikibot
@@ -77,9 +77,31 @@ csrf_token = bot.get_csrf_token(url)
 df = pd.read_csv('wikidata-properties-complete-en.tsv', sep='\t')
 
 for idx, row in df.iterrows():
-    property_type = row['propertyType'].replace('http://wikiba.se/ontology#',
-                                                '').lower()
+    mapper = {
+        'http://wikiba.se/ontology#CommonsMedia': 'commonsMedia',
+        'http://wikiba.se/ontology#String': 'string',
+        'http://wikiba.se/ontology#ExternalId': 'external-id',
+        'http://wikiba.se/ontology#WikibaseItem': 'wikibase-item',
+        'http://wikiba.se/ontology#Quantity': 'quantity',
+        'http://wikiba.se/ontology#Time': 'time',
+        'http://wikiba.se/ontology#Url': 'url',
+        'http://wikiba.se/ontology#Monolingualtext': 'monolingualtext',
+        'http://wikiba.se/ontology#WikibaseProperty': 'wikibase-property',
+        'http://wikiba.se/ontology#TabularData': 'tabular-data',
+        'http://wikiba.se/ontology#GeoShape': 'geo-shape',
+        'http://wikiba.se/ontology#GlobeCoordinate': 'globe-coordinate'
+    }
 
-    bot.write_property(url, csrf_token, row['propertyLabel'],
-                       row['propertyDescription'], property_type)
+    property_type = mapper.get(row['propertyType'])
+
+    if not property_type:
+        print(f"Property type of: {row['property']} is unknown.")
+        continue
+
+  bot.write_property(api_url=url,
+                     edit_token=csrf_token,
+                     label_value=row['propertyLabel'],
+                     description_value=row['propertyDescription'],
+                     lang='en',
+                     datatype=property_type)
 ```

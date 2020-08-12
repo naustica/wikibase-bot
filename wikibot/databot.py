@@ -2,6 +2,7 @@ import requests
 import os
 import json
 from typing import List
+from bs4 import BeautifulSoup
 
 
 class Wikibot:
@@ -62,27 +63,39 @@ class Wikibot:
         return data['query']['tokens']['csrftoken']
 
     def write_property(self, api_url: str, edit_token: str, label_value: str,
-                       description_value: str, datatype: str) -> int:
+                       description_value: str, lang: str, datatype: str,
+                       id: str = None, alias_values: str = None):
+
+        data = dict()
+
+        labels = dict(labels=dict())
+        labels['labels'][lang] = {'language': lang, 'value': label_value}
+
+        description = dict(descriptions=dict())
+        description['descriptions'][lang] = {'language': lang,
+                                             'value': description_value}
+
+        aliases = dict(aliases=dict())
+        aliases['aliases'][lang] = {'language': lang, 'value': alias_values}
+
+        data.update(labels)
+        data.update(description)
+        data.update({'datatype': datatype})
+        if alias_values:
+            data.update(aliases)
+
         parameters = dict(
             action='wbeditentity',
             bot=1,
             token=edit_token,
             new='property',
-            data=json.dumps(dict(labels=dict(
-                en=dict(
-                    language='en',
-                    value=label_value
-                )
-            ),
-                descriptions=dict(
-                en=dict(
-                    language='en',
-                    value=description_value
-                )
-            ),
-                datatype=datatype
-            ))
+            data=json.dumps(data)
         )
 
+        if id:
+            parameters.update({'id': id})
+
         r = self.session.post(api_url, data=parameters)
-        return r.status_code
+        r_html = BeautifulSoup(r.text, 'lxml')
+        return json.loads(r_html.find('pre',
+                                      {'class': 'api-pretty-content'}).string)
