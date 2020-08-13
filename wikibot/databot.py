@@ -172,3 +172,26 @@ class Wikibot:
         r_html = BeautifulSoup(r.text, 'lxml')
         return json.loads(r_html.find('pre',
                                       {'class': 'api-pretty-content'}).string)
+
+    def write_statement(self, api_url: str, edit_token: str,
+                        subject: str, property: str, object: str):
+
+        parameters = dict(
+            action='wbcreateclaim',
+            format='json',
+            entity=subject,
+            snaktype='value',
+            bot=1,
+            token=edit_token,
+            property=property,
+            value=json.dumps(
+                {
+                    'entity-type': 'item',
+                    'numeric-id': object[1:]
+                }
+            )
+        )
+
+        r = self.session.post(api_url, data=parameters)
+
+        return r.json()
