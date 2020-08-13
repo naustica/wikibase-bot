@@ -40,7 +40,7 @@ for idx, row in df.iterrows():
 
     data = bot.write_entity(api_url=url,
                             edit_token=csrf_token,
-                            new='property',
+                            entity_type='property',
                             label_value=row['propertyLabel'],
                             description_value=row['propertyDescription'],
                             lang='en',

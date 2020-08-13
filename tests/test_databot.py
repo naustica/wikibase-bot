@@ -1,7 +1,6 @@
 import pytest
 from wikibot.databot import Wikibot
 import os
-import requests
 
 
 @pytest.fixture
@@ -9,11 +8,6 @@ def set_env():
     os.environ['wikibase_instance_url'] = 'http://localhost:8181/w/api.php'
     os.environ['wikibase_username'] = 'Test@bot'
     os.environ['wikibase_pw'] = 'testpw'
-
-
-@pytest.fixture(scope='session')
-def session():
-    return requests.Session()
 
 
 class TestWikibot:
@@ -45,3 +39,19 @@ class TestWikibot:
         r = bot.get_login_token(os.environ.get('wikibase_instance_url'))
 
         assert r == 'test_login_token'
+
+    def test_login(self, set_env, requests_mock):
+
+        bot = Wikibot()
+
+        data = {}
+
+        requests_mock.post(os.environ.get('wikibase_instance_url'),
+                           json=data)
+
+        r = bot.login(api_url=os.environ.get('wikibase_instance_url'),
+                      token='test_login_token',
+                      username=os.environ.get('wikibase_username'),
+                      password=os.environ.get('wikibase_pw'))
+
+        assert r == {}

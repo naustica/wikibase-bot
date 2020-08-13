@@ -166,6 +166,7 @@ class Wikibot:
         )
 
         if id:
+            parameters.pop('new')
             parameters.update({'id': id})
 
         r = self.session.post(api_url, data=parameters)

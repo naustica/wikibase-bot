@@ -5,6 +5,8 @@ This repository contains an extended implementation of this [wikibase-bot](https
 ## Features
 
 - Import of properties
+- Import of items
+- Adding of statements
 - More features in pipeline!
 
 ## Installation
@@ -102,7 +104,7 @@ for idx, row in df.iterrows():
 
     bot.write_entity(api_url=url,
                      edit_token=csrf_token,
-                     new='property',
+                     entity_type='property',
                      label_value=row['propertyLabel'],
                      description_value=row['propertyDescription'],
                      lang='en',
