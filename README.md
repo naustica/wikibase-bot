@@ -136,7 +136,7 @@ bot.write_entity(api_url=url,
                  label_value='Henri de Toulouse-Lautrec',
                  description_value='French painter',
                  lang='en',
-                 item='Q82445')
+                 id='Q82445')
 ```
 
 ## Write statement
