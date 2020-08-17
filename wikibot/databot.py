@@ -120,17 +120,15 @@ class Wikibot:
             CSRF token which can be generated with the get_crsf_token method.
         entity_type: str
             Type of entity to be created.
-        label_value: str
+        labels: Dict[str, str]
             Label value of entity.
-        description_value: str
+        descriptions: Dict[str, str]
             Description value of entity.
-        lang: str
-            Language of entity information.
         datatype: str
             If entity type is set to property, specify the desired datatype.
         id: str
             Id of an existing entity type to be modified.
-        alias_value: str
+        aliases: Dict[str, str]
             Set an alias for an entity.
 
         Returns
