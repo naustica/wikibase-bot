@@ -125,9 +125,9 @@ bot.write_entity(api_url=url,
                  alias_value='Henri de Toulouse Lautrec')
 ```
 
-## Overwrite existing item
+## Overwrite existing item/property
 
-By adding the parameter `id`, you can update an existing wikibase item.
+By adding the parameter `id`, you can update an existing wikibase item or property.
 
 ```python
 bot.write_entity(api_url=url,
