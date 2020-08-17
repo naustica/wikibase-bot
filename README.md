@@ -110,3 +110,43 @@ for idx, row in df.iterrows():
                      lang='en',
                      datatype=property_type)
 ```
+
+## Import items
+
+You can also use the same method to create a wikibase item.
+
+```python
+bot.write_entity(api_url=url,
+                 edit_token=csrf_token,
+                 entity_type='item',
+                 label_value='Henri de Toulouse-Lautrec',
+                 description_value='French painter',
+                 lang='en',
+                 alias_value='Henri de Toulouse Lautrec')
+```
+
+## Overwrite existing item
+
+By adding the parameter `id`, you can update an existing wikibase item.
+
+```python
+bot.write_entity(api_url=url,
+                 edit_token=csrf_token,
+                 entity_type='item',
+                 label_value='Henri de Toulouse-Lautrec',
+                 description_value='French painter',
+                 lang='en',
+                 item='Q82445')
+```
+
+## Write statement
+
+Use the method `write_statement` to add statements into your database.
+
+```python
+bot.write_statement(api_url=url,
+                    edit_token=csrf_token,
+                    subject_id='Q82445',
+                    property_id='P31',
+                    object_id='Q5')
+```

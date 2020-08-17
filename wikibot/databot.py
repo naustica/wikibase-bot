@@ -175,20 +175,41 @@ class Wikibot:
                                       {'class': 'api-pretty-content'}).string)
 
     def write_statement(self, api_url: str, edit_token: str,
-                        subject: str, property: str, object: str):
+                        subject_id: str, property_id: str, object_id: str):
+
+        """
+        This method creates a wikibase claim.
+
+        Parameters
+        ----------
+        api_url: str
+            Url to the Wikibase API instance.
+        edit_token: str
+            CSRF token which can be generated with the get_crsf_token method.
+        subject_id: str
+            Id of the entity the claim is being added to
+        property_id: str
+            Id of the property
+        object_id: str
+            Id of the object
+
+        Returns
+        -------
+        JSON object
+        """
 
         parameters = dict(
             action='wbcreateclaim',
             format='json',
-            entity=subject,
+            entity=subject_id,
             snaktype='value',
             bot=1,
             token=edit_token,
-            property=property,
+            property=property_id,
             value=json.dumps(
                 {
                     'entity-type': 'item',
-                    'numeric-id': object[1:]
+                    'numeric-id': object_id[1:]
                 }
             )
         )
