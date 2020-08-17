@@ -1,5 +1,8 @@
 # wikibase-bot
 
+[![Build Status](https://travis-ci.org/naustica/wikibase-bot.svg?branch=master)](https://travis-ci.org/github/naustica/wikibase-bot)
+[![codecov.io](https://codecov.io/gh/naustica/wikibase-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/naustica/wikibase-bot?branch=master)
+
 This repository contains an extended implementation of this [wikibase-bot](https://github.com/HeardLibrary/digital-scholarship/blob/master/code/wikibase/api/write-statements.py) that is maintained by Digital Scholarship and Communications.
 
 ## Features

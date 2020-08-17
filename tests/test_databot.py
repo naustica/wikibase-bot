@@ -55,3 +55,52 @@ class TestWikibot:
                       password=os.environ.get('wikibase_pw'))
 
         assert r == {}
+
+    def test_get_csrf_token(self, set_env, requests_mock):
+
+        bot = Wikibot()
+
+        data = {"query": {"tokens": {"csrftoken": "test_csrftoken"}}}
+
+        requests_mock.get(os.environ.get('wikibase_instance_url'),
+                          json=data)
+
+        r = bot.get_csrf_token(api_url=os.environ.get('wikibase_instance_url'))
+
+        assert r == 'test_csrftoken'
+
+    def test_write_entity(self, set_env, requests_mock):
+
+        bot = Wikibot()
+
+        html = '<pre class="api-pretty-content">{"response": "test"}</pre>'
+
+        requests_mock.post(os.environ.get('wikibase_instance_url'),
+                           text=html)
+
+        r = bot.write_entity(api_url=os.environ.get('wikibase_instance_url'),
+                             edit_token='test_csrftoken',
+                             entity_type='property',
+                             label_value='test label',
+                             description_value='test description',
+                             lang='en',
+                             datatype='string')
+
+        assert r == {"response": "test"}
+
+    def test_write_statement(self, set_env, requests_mock):
+
+        bot = Wikibot()
+
+        data = {}
+
+        requests_mock.post(os.environ.get('wikibase_instance_url'),
+                           json=data)
+
+        r = bot.write_statement(os.environ.get('wikibase_instance_url'),
+                                edit_token='test_csrftoken',
+                                subject_id='Q82445',
+                                property_id='P31',
+                                object_id='Q5')
+
+        assert r == {}
