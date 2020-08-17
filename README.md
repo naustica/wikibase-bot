@@ -123,7 +123,7 @@ bot.write_entity(api_url=url,
                  entity_type='item',
                  labels={'en': 'Henri de Toulouse-Lautrec'},
                  descriptions={'en': 'French painter'},
-                 aliases={'en': 'Henri de Toulouse Lautrec'}
+                 aliases={'en': 'Henri de Toulouse Lautrec'})
 ```
 
 ## Overwrite existing item/property
