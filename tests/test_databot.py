@@ -81,9 +81,8 @@ class TestWikibot:
         r = bot.write_entity(api_url=os.environ.get('wikibase_instance_url'),
                              edit_token='test_csrftoken',
                              entity_type='property',
-                             label_value='test label',
-                             description_value='test description',
-                             lang='en',
+                             labels={'en': 'test label'},
+                             descriptions={'en': 'test description'},
                              datatype='string')
 
         assert r == {"response": "test"}

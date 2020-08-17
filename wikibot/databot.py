@@ -1,7 +1,7 @@
 import requests
 import os
 import json
-from typing import List
+from typing import List, Dict
 from bs4 import BeautifulSoup
 
 
@@ -105,9 +105,9 @@ class Wikibot:
         return data['query']['tokens']['csrftoken']
 
     def write_entity(self, api_url: str, edit_token: str, entity_type: str,
-                     label_value: str, description_value: str, lang: str,
+                     labels: Dict[str, str], descriptions: Dict[str, str],
                      datatype: str = None, id: str = None,
-                     alias_value: str = None):
+                     aliases: Dict[str, str] = None):
         """
         This method creates a single new Wikibase entity and modifies it with
         serialised information.
@@ -138,22 +138,19 @@ class Wikibot:
         JSON object
         """
 
-        data = dict()
+        data = {'labels': {}, 'descriptions': {}, 'aliases': {}}
 
-        labels = dict(labels=dict())
-        labels['labels'][lang] = {'language': lang, 'value': label_value}
+        for k, v in labels.items():
+            data['labels'].update({k: {'language': k, 'value': v}})
 
-        description = dict(descriptions=dict())
-        description['descriptions'][lang] = {'language': lang,
-                                             'value': description_value}
+        for k, v in descriptions.items():
+            data['descriptions'].update({k: {'language': k, 'value': v}})
 
-        aliases = dict(aliases=dict())
-        aliases['aliases'][lang] = {'language': lang, 'value': alias_value}
-
-        data.update(labels)
-        data.update(description)
-        if alias_value:
-            data.update(aliases)
+        if aliases:
+            for k, v in aliases.items():
+                data['aliases'].update({k: {'language': k, 'value': v}})
+        else:
+            data.pop('aliases')
         if entity_type == 'property':
             data.update({'datatype': datatype})
 

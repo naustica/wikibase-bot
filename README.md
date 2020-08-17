@@ -105,13 +105,12 @@ for idx, row in df.iterrows():
         print(f"Property type of: {row['property']} is unknown.")
         continue
 
-    bot.write_entity(api_url=url,
-                     edit_token=csrf_token,
-                     entity_type='property',
-                     label_value=row['propertyLabel'],
-                     description_value=row['propertyDescription'],
-                     lang='en',
-                     datatype=property_type)
+        bot.write_entity(api_url=url,
+                         edit_token=csrf_token,
+                         entity_type='property',
+                         labels={'en': row['propertyLabel']},
+                         descriptions={'en': row['propertyDescription']},
+                         datatype=property_type)
 ```
 
 ## Import items
@@ -122,10 +121,9 @@ You can also use the same method to create a wikibase item.
 bot.write_entity(api_url=url,
                  edit_token=csrf_token,
                  entity_type='item',
-                 label_value='Henri de Toulouse-Lautrec',
-                 description_value='French painter',
-                 lang='en',
-                 alias_value='Henri de Toulouse Lautrec')
+                 labels={'en': 'Henri de Toulouse-Lautrec'},
+                 descriptions={'en': 'French painter'},
+                 aliases={'en': 'Henri de Toulouse Lautrec'}
 ```
 
 ## Overwrite existing item/property
@@ -136,9 +134,8 @@ By adding the parameter `id`, you can update an existing wikibase item or proper
 bot.write_entity(api_url=url,
                  edit_token=csrf_token,
                  entity_type='item',
-                 label_value='Henri de Toulouse-Lautrec',
-                 description_value='French painter',
-                 lang='en',
+                 labels={'en': 'Henri de Toulouse-Lautrec'},
+                 descriptions={'en': 'French painter'},
                  id='Q82445')
 ```
 
